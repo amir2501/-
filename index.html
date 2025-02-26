@@ -4,51 +4,74 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Wow Music Player</title>
-  </head>
-  <body
-    style="
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #1e3c72, #2a5298);
-      color: white;
-      overflow: hidden;
-      margin: 0;
-    "
-  >
-    <!-- First Audio Player -->
-    <div
-      style="
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        text-align: center;
+        font-family: "Times New Roman", serif;
+        background-color: #0d0c00;
+        color: #d9b991;
+        overflow: hidden;
+        margin: 0;
+      }
+
+      .player-container {
+        background: #400106;
+        /* border: 2px solid #d4af37; */
         padding: 20px;
-        border-radius: 20px;
-        box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
-        width: 300px;
+        border-radius: 15px;
+        box-shadow: 5px 5px 20px rgba(91, 91, 91, 0.2);
+        width: 350px;
         text-align: center;
         margin-bottom: 20px;
-      "
-    >
-      <h2 style="margin-bottom: 10px">Пересказ часть 1</h2>
+      }
+
+      h2 {
+        margin-bottom: 10px;
+        font-weight: bold;
+      }
+
+      .play-btn {
+        background: #d9b991;
+        border: 2px solid #8c784e;
+        padding: 10px 25px;
+        font-size: 18px;
+        border-radius: 50px;
+        cursor: pointer;
+        margin: 10px;
+        transition: 0.3s;
+        font-weight: bold;
+        color: #3d2b1f;
+      }
+
+      .play-btn:hover {
+        background: #b89e5a;
+      }
+
+      input[type="range"] {
+        width: 100%;
+        margin: 10px 0;
+        -webkit-appearance: none;
+        background: #d9b991;
+        height: 5px;
+        border-radius: 5px;
+        outline: none;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="player-container">
+      <h2>Пересказ часть 1</h2>
       <audio id="player1" src="пересказ.mp3"></audio>
       <button
         onclick="togglePlay('player1', 'playBtn1')"
         id="playBtn1"
-        style="
-          background: #ffcc00;
-          border: none;
-          padding: 10px 20px;
-          font-size: 18px;
-          border-radius: 50px;
-          cursor: pointer;
-          margin: 10px;
-          transition: 0.3s;
-          font-weight: bold;
-        "
+        class="play-btn"
       >
         ▶ Play
       </button>
@@ -58,48 +81,16 @@
         value="0"
         step="1"
         oninput="seekAudio('player1', 'seek1')"
-        style="
-          width: 100%;
-          margin: 10px 0;
-          -webkit-appearance: none;
-          background: rgba(255, 255, 255, 0.3);
-          height: 5px;
-          border-radius: 5px;
-          outline: none;
-          transition: 0.3s;
-          cursor: pointer;
-        "
       />
     </div>
 
-    <!-- Second Audio Player -->
-    <div
-      style="
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        padding: 20px;
-        border-radius: 20px;
-        box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
-        width: 300px;
-        text-align: center;
-      "
-    >
-      <h2 style="margin-bottom: 10px">Пересказ часть 2</h2>
+    <div class="player-container">
+      <h2>Пересказ часть 2</h2>
       <audio id="player2" src="Пересказ часть 2.mp3"></audio>
       <button
         onclick="togglePlay('player2', 'playBtn2')"
         id="playBtn2"
-        style="
-          background: #ffcc00;
-          border: none;
-          padding: 10px 20px;
-          font-size: 18px;
-          border-radius: 50px;
-          cursor: pointer;
-          margin: 10px;
-          transition: 0.3s;
-          font-weight: bold;
-        "
+        class="play-btn"
       >
         ▶ Play
       </button>
@@ -109,17 +100,6 @@
         value="0"
         step="1"
         oninput="seekAudio('player2', 'seek2')"
-        style="
-          width: 100%;
-          margin: 10px 0;
-          -webkit-appearance: none;
-          background: rgba(255, 255, 255, 0.3);
-          height: 5px;
-          border-radius: 5px;
-          outline: none;
-          transition: 0.3s;
-          cursor: pointer;
-        "
       />
     </div>
 
@@ -148,12 +128,10 @@
         const player = document.getElementById(playerId);
         const seekBar = document.getElementById(seekId);
 
-        // Update max value only when metadata is loaded
         player.addEventListener("loadedmetadata", () => {
           seekBar.max = player.duration;
         });
 
-        // Update seek bar as audio plays
         player.addEventListener("timeupdate", () => {
           seekBar.value = player.currentTime;
         });
