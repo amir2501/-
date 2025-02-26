@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Пересказ</title>
+    <title>Wow Music Player</title>
   </head>
   <body
     style="
@@ -20,6 +20,7 @@
       margin: 0;
     "
   >
+    <!-- First Audio Player -->
     <div
       style="
         background: rgba(255, 255, 255, 0.1);
@@ -29,13 +30,14 @@
         box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
         width: 300px;
         text-align: center;
+        margin-bottom: 20px;
       "
     >
-      <h2 style="margin-bottom: 10px">Пересказ</h2>
-      <audio id="player" src="пересказ.mp3"></audio>
+      <h2 style="margin-bottom: 10px">Пересказ часть 1</h2>
+      <audio id="player1" src="пересказ.mp3"></audio>
       <button
-        onclick="togglePlay()"
-        id="playBtn"
+        onclick="togglePlay('player1', 'playBtn1')"
+        id="playBtn1"
         style="
           background: #ffcc00;
           border: none;
@@ -52,10 +54,61 @@
       </button>
       <input
         type="range"
-        id="seek"
+        id="seek1"
         value="0"
         step="1"
-        oninput="seekAudio()"
+        oninput="seekAudio('player1', 'seek1')"
+        style="
+          width: 100%;
+          margin: 10px 0;
+          -webkit-appearance: none;
+          background: rgba(255, 255, 255, 0.3);
+          height: 5px;
+          border-radius: 5px;
+          outline: none;
+          transition: 0.3s;
+          cursor: pointer;
+        "
+      />
+    </div>
+
+    <!-- Second Audio Player -->
+    <div
+      style="
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+        width: 300px;
+        text-align: center;
+      "
+    >
+      <h2 style="margin-bottom: 10px">Пересказ часть 2</h2>
+      <audio id="player2" src="Пересказ часть 2.mp3"></audio>
+      <button
+        onclick="togglePlay('player2', 'playBtn2')"
+        id="playBtn2"
+        style="
+          background: #ffcc00;
+          border: none;
+          padding: 10px 20px;
+          font-size: 18px;
+          border-radius: 50px;
+          cursor: pointer;
+          margin: 10px;
+          transition: 0.3s;
+          font-weight: bold;
+        "
+      >
+        ▶ Play
+      </button>
+      <input
+        type="range"
+        id="seek2"
+        value="0"
+        step="1"
+        oninput="seekAudio('player2', 'seek2')"
         style="
           width: 100%;
           margin: 10px 0;
@@ -71,24 +124,12 @@
     </div>
 
     <script>
-      const player = document.getElementById("player");
-      const seekBar = document.getElementById("seek");
-      const playBtn = document.getElementById("playBtn");
+      function togglePlay(playerId, btnId) {
+        const player = document.getElementById(playerId);
+        const playBtn = document.getElementById(btnId);
 
-      player.addEventListener(
-        "loadedmetadata",
-        () => (seekBar.max = player.duration)
-      );
-      player.addEventListener(
-        "timeupdate",
-        () => (seekBar.value = player.currentTime)
-      );
-      function seekAudio() {
-        player.currentTime = seekBar.value;
-      }
-
-      function togglePlay() {
         if (player.paused) {
+          stopAllPlayers(); // Stop other players before playing
           player.play();
           playBtn.textContent = "⏸ Pause";
         } else {
@@ -96,6 +137,40 @@
           playBtn.textContent = "▶ Play";
         }
       }
+
+      function seekAudio(playerId, seekId) {
+        const player = document.getElementById(playerId);
+        const seekBar = document.getElementById(seekId);
+        player.currentTime = seekBar.value;
+      }
+
+      function updateSeekBar(playerId, seekId) {
+        const player = document.getElementById(playerId);
+        const seekBar = document.getElementById(seekId);
+
+        // Update max value only when metadata is loaded
+        player.addEventListener("loadedmetadata", () => {
+          seekBar.max = player.duration;
+        });
+
+        // Update seek bar as audio plays
+        player.addEventListener("timeupdate", () => {
+          seekBar.value = player.currentTime;
+        });
+      }
+
+      function stopAllPlayers() {
+        document.querySelectorAll("audio").forEach((player) => {
+          player.pause();
+          document.getElementById("playBtn1").textContent = "▶ Play";
+          document.getElementById("playBtn2").textContent = "▶ Play";
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        updateSeekBar("player1", "seek1");
+        updateSeekBar("player2", "seek2");
+      });
     </script>
   </body>
 </html>
